@@ -1,0 +1,4 @@
+﻿  decrypt.cpp
+C:\Users\zondo\source\repos\laboratornaya_2\laboratornaya_2\decrypt.cpp(27,23): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\zondo\source\repos\laboratornaya_2\laboratornaya_2\decrypt.cpp(28,32): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+  laboratornaya_2.vcxproj -> C:\Users\zondo\source\repos\laboratornaya_2\x64\Debug\laboratornaya_2.exe
