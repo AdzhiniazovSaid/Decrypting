@@ -3,6 +3,7 @@
 #include <iostream>
 #include <conio.h>
 #include <clocale>
+#include <fstream>
 
 using namespace std;
 
@@ -13,65 +14,110 @@ enum Menu {
 
 void decrypt()
 {
-    cout << "|------------ÐÀÑØÈÔÐÎÂÊÀ------------|" << endl;
+    cout << "|------------Ð ÐÐ¡Ð¨Ð˜Ð¤Ð ÐžÐ’ÐšÐ------------|" << endl;
 
+    ifstream file("Ð»Ð°Ð±Ð°2.txt");
     string decrypt_text, key, D = "";
-    string A = "àáâãäå¸æçèéêëìíîïðñòóôõö÷øùúûüýþÿ";
+    string A = "Ð°Ð±Ð²Ð³Ð´ÐµÑ‘Ð¶Ð·Ð¸Ð¹ÐºÐ»Ð¼Ð½Ð¾Ð¿Ñ€ÑÑ‚ÑƒÑ„Ñ…Ñ†Ñ‡ÑˆÑ‰ÑŠÑ‹ÑŒÑÑŽÑ";
     setlocale(LC_ALL, "Rus");
-    cout << "\n[DEC] Ââåäèòå ñëîâî: ";
+    cout << "\n[DEC] Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ ÑÐ»Ð¾Ð²Ð¾: ";
     cin >> decrypt_text;
-    cout << "\n[DEC] Ââåäèòå êëþ÷: ";
+    cout << "\n[DEC] Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ ÐºÐ»ÑŽÑ‡: ";
     cin >> key;
     int* F = new int[decrypt_text.size()];
     int* G = new int[decrypt_text.size()];
     int c = key.size();
     int b = decrypt_text.size();
 
-    if (b >= c)
+    if (!file)
     {
-        for (int i = 0; i < (b / c); i++)
-        {
-            D = D + key;
-        }
-        for (int j = 0; j < (b % c); j++)
-        {
-            D = D + key[j];
-        }
+        cout << "[WARNING] Ð¤Ð°Ð¹Ð» Ð½Ðµ Ð¾Ñ‚ÐºÑ€Ñ‹Ð»ÑÑ !";
     }
+
     else
     {
-        for (int s = 0; s < b; s++)
+        if (b >= c)
         {
-            D = D + decrypt_text[s];
+            for (int i = 0; i < (b / c); i++)
+            {
+                D = D + key;
+            }
+            for (int j = 0; j < (b % c); j++)
+            {
+                D = D + key[j];
+            }
+        }
+        else
+        {
+            for (int s = 0; s < b; s++)
+            {
+                D = D + decrypt_text[s];
+            }
+        }
+
+        for (int k = 0; k < b; k++)
+        {
+            for (int n = 0; n < 33; n++)
+            {
+                if (decrypt_text[k] == A[n])
+                {
+                    F[k] = n;
+                }
+
+                if (D[k] == A[n])
+                {
+                    G[k] = n;
+                }
+            }
+        }
+
+        int e = 0;
+        for (int u = 0; u < b; u++)
+        {
+            e = ((F[u] - G[u]));
+            if (e < 0)
+                e += 33;
+            decrypt_text[u] = A[e];
         }
     }
 
-    for (int k = 0; k < b; k++)
+    int choose;
+
+    cout << "\nÐ¥Ð¾Ñ‡ÐµÑˆÑŒ Ð·Ð°Ð¿Ð¸ÑÐ°Ñ‚ÑŒ Ñ€Ð°ÑÑˆÐ¸Ñ„Ñ€Ð¾Ð²Ð°Ð½Ð½Ñ‹Ð¹ Ñ‚ÐµÐºÑÑ‚ Ð² Ñ„Ð°Ð¹Ð» ? [0 - ÐÐµÑ‚ | 1 - Ð”Ð°]";
+    cout << "\nÐ’Ð°Ñˆ Ð²Ñ‹Ð±Ð¾Ñ€: ";
+    cin >> choose;
+
+    string dir;
+
+    if (choose == 1)
     {
-        for (int n = 0; n < 33; n++)
+        system("cls");
+        cout << "[DEC] Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð´Ð¸Ñ€ÐµÐºÑ‚Ð¾Ñ€Ð¸ÑŽ Ñ„Ð°Ð¹Ð»Ð°: ";
+
+        cin >> dir;
+        ofstream out;
+        out.open(dir);
+
+        if (!out.is_open())
         {
-            if (decrypt_text[k] == A[n])
-            {
-                F[k] = n;
-            }
-
-            if (D[k] == A[n])
-            {
-                G[k] = n;
-            }
+            cout << "[WARNING] Ð¤Ð°Ð¹Ð» Ð½Ðµ Ð±Ñ‹Ð» Ð¾Ñ‚ÐºÑ€Ñ‹Ñ‚ !";
         }
+
+        else
+        {
+            out << decrypt_text;
+
+            cout << "[MESSAGE] Ð¤Ð°Ð¹Ð» ÑƒÑÐ¿ÐµÑˆÐ½Ð¾ ÑÐ¾Ð·Ð´Ð°Ð½ ! ";
+        }
+
+        out.close();
     }
 
-    int e = 0;
-    for (int u = 0; u < b; u++)
+    if (choose == 0)
     {
-        e = ((F[u] - G[u]));
-        if (e < 0)
-            e += 33;
-        decrypt_text[u] = A[e];
+        system("cls");
+        cout << "Ð Ð°ÑÑˆÐ¸Ñ„Ñ€Ð¾Ð²Ð°Ð½Ð½Ñ‹Ð¹ Ñ‚ÐµÐºÑÑ‚: " << decrypt_text;
     }
-
-    cout << "[DEC] Çàøèôðîâàííûé òåêñò: " << decrypt_text << endl;
 }
 
 int main()
@@ -81,17 +127,18 @@ int main()
     int choose;
     bool tryes;
 
-    cout << "\n|------------ÌÅÍÞ------------|" << endl;
-    cout << "\n\t[DEC] 0. Âûõîä " << "\n\t[DEC] 1. Ðàñøèôðîâêà ";
-    cout << "\n\nÂàø âûáîð: ";
+    do {
+
+    cout << "\n|------------ÐœÐ•ÐÐ®------------|" << endl;
+    cout << "\n\t[DEC] 0. Ð’Ñ‹Ñ…Ð¾Ð´ " << "\n\t[DEC] 1. Ð Ð°ÑÑˆÐ¸Ñ„Ñ€Ð¾Ð²ÐºÐ° ";
+    cout << "\n\nÐ’Ð°Ñˆ Ð²Ñ‹Ð±Ð¾Ñ€: ";
     cin >> choose;
 
-    do {
         switch (choose)
         {
         case close:
             system("cls");
-            cout << "[MESSAGE] Âû âûøëè !";
+            cout << "[MESSAGE] Ð’Ñ‹ Ð²Ñ‹ÑˆÐ»Ð¸ !";
             exit(0);
 
         case decrypting:
@@ -101,13 +148,14 @@ int main()
 
         default:
             system("cls");
-            cout << "[MESSAGE] Íåêêîðåêòíûé âûáîð ";
+            cout << "[MESSAGE] ÐÐµÐºÐºÐ¾Ñ€ÐµÐºÑ‚Ð½Ñ‹Ð¹ Ð²Ñ‹Ð±Ð¾Ñ€ ";
             break;
         }
 
-        cout << "\nÕîòèòå âåðíóòüñÿ â ìåíþ [1 - Äà | 0 - Íåò]" ;
-        cout << "\n\nÂàø âûáîð: ";
+        cout << "\n\nÐ¥Ð¾Ñ‚Ð¸Ñ‚Ðµ Ð²ÐµÑ€Ð½ÑƒÑ‚ÑŒÑÑ Ð² Ð¼ÐµÐ½ÑŽ [1 - Ð”Ð° | 0 - ÐÐµÑ‚]" ;
+        cout << "\n\nÐ’Ð°Ñˆ Ð²Ñ‹Ð±Ð¾Ñ€: ";
         cin >> tryes;
+        system("cls");
 
     } while (tryes != 0);
 }
